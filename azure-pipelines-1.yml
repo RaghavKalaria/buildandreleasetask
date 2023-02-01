@@ -23,6 +23,7 @@ stages:
             inputs:
               script: |
                 pwd
+                ls -a
           - task: Bash@3
             displayName: Compile Javascript
             inputs:
