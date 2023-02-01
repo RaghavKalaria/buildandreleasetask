@@ -1,6 +1,6 @@
 {
  "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
- "id": "7770",
+ "id": "MindstixTestLib@1",
  "name": "InOut",
  "friendlyName": "InOut",
  "description": "Takes input and displays output",
