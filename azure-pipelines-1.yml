@@ -1,0 +1,50 @@
+trigger: 
+- master
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  - group: V1 # Rename to whatever you named your variable group in the prerequisite stage of step 6
+
+stages:
+  - stage: Run_and_publish_unit_tests
+    jobs:
+      - job:
+        steps:
+          - task: TfxInstaller@4
+            inputs:
+              version: "v0.x"
+          - task: Npm@1
+            inputs:
+              command: 'install'
+              workingDir: '' # Update to the name of the directory of your task
+          - task: CmdLine@2
+            inputs:
+              script: |
+                pwd
+                ls -a
+          - task: Bash@3
+            displayName: Compile Javascript
+            inputs:
+              targetType: "inline"
+              script: |
+                cd TaskDirectory # Update to the name of the directory of your task
+                tsc
+          - task: CmdLine@2
+            inputs:
+              script: |
+                pwd
+          - task: Npm@1
+            inputs:
+              command: 'custom'
+              workingDir: '/tests' # Update to the name of the directory of your task's tests
+              customCommand: 'testScript' # See the definition in the explanation section below - it may be called test
+          - task: CmdLine@2
+            inputs:
+              script: |
+                pwd
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '**/ResultsFile.xml'
