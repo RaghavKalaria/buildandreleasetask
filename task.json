@@ -1,6 +1,6 @@
 {
  "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
- "id": "Microsoft.VisualStudio.Services",
+ "id": "eb15dbd2-fbbf-4dc7-ab58-3482f7148819",
  "name": "InOut",
  "friendlyName": "InOut",
  "description": "Takes input and displays output",
