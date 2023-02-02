@@ -2,16 +2,18 @@ import tl = require('azure-pipelines-task-lib/task');
 
 async function run() {
     try {
-        const inputString: string | undefined = tl.getInput('samplestring', true);
-        if (inputString == 'bad') {
-            tl.setResult(tl.TaskResult.Failed, 'Bad input was given');
-            return;
-        }
-        console.log('Hello', inputString);
+        const num1 : string| undefined = tl.getInput('Number1',true);
+        const num2 : string | undefined = tl.getInput('Number2',true);
+        const Op : string | undefined = tl.getInput('Operation', true);
+        
+        console.log(eval(num1+Op+num2));
+        
     }
     catch (e) {
+        
         console.error(e);
     }
 }
 
 run();
+
