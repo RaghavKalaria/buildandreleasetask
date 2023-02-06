@@ -15,19 +15,10 @@ stages:
           - task: TfxInstaller@4
             inputs:
               version: "v0.x"
-          - task: InOut@0
-            inputs:
-              samplestring: 'hello'
           - task: Npm@1
             inputs:
               command: 'install'
-              workingDir: '' # Update to the name of the directory of your task
-          - task: CmdLine@2
-            inputs:
-              script: |
-                pwd
-                ls -a
-                cd tests
+              workingDir: '/TaskDirectory' # Update to the name of the directory of your task
           - task: Bash@3
             displayName: Compile Javascript
             inputs:
@@ -35,20 +26,15 @@ stages:
               script: |
                 cd TaskDirectory # Update to the name of the directory of your task
                 tsc
-          - task: CmdLine@2
+          - task: Npm@1
             inputs:
-              script: |
-                pwd
-                ls -a
-          - task: CmdLine@2
-            inputs:
-              script: |
-                pwd
+              command: 'custom'
+              workingDir: '/TestsDirectory' # Update to the name of the directory of your task's tests
+              customCommand: 'testScript' # See the definition in the explanation section below - it may be called test
           - task: PublishTestResults@2
             inputs:
               testResultsFormat: 'JUnit'
               testResultsFiles: '**/ResultsFile.xml'
-              
   - stage: Package_extension_and_publish_build_artifacts
     jobs:
       - job:
@@ -59,7 +45,7 @@ stages:
           - task: Npm@1
             inputs:
               command: 'install'
-              workingDir: '' # Update to the name of the directory of your task
+              workingDir: '/TaskDirectory' # Update to the name of the directory of your task
           - task: Bash@3
             displayName: Compile Javascript
             inputs:
@@ -71,7 +57,7 @@ stages:
             name: QueryVersion
             inputs:
               connectTo: 'VsTeam'
-              connectedServiceName: 'InOut' # Change to whatever you named the service connection
+              connectedServiceName: 'ServiceConnection' # Change to whatever you named the service connection
               publisherId: '$(PublisherID)'
               extensionId: '$(ExtensionID)'
               versionAction: 'Patch'
@@ -112,7 +98,7 @@ stages:
           - task: PublishAzureDevOpsExtension@4
             inputs:
               connectTo: 'VsTeam'
-              connectedServiceName: 'InOut' # Change to whatever you named the service connection
+              connectedServiceName: 'ServiceConnection' # Change to whatever you named the service connection
               fileType: 'vsix'
               vsixFile: '$(PublisherID).$(ExtensionName)/$(PublisherID)..vsix'
               publisherId: '$(PublisherID)'
